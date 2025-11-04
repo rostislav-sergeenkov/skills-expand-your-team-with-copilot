@@ -190,7 +190,7 @@ section h3 {
   justify-content: center;
 }
 
-/* Activity Tag */
+/* Activity Tag (positioned top-right) */
 .activity-tag {
   position: absolute;
   top: 8px;
@@ -205,7 +205,7 @@ section h3 {
   letter-spacing: 0.3px;
 }
 
-/* Difficulty Badge */
+/* Difficulty Badge (positioned top-left, opposite of activity-tag) */
 .difficulty-badge {
   position: absolute;
   top: 8px;

@@ -552,6 +552,28 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}
         </ul>
       </div>
+      <div class="social-sharing">
+        <button class="share-button facebook tooltip" data-activity="${name}" data-platform="facebook" title="Share on Facebook">
+          📘
+          <span class="tooltip-text">Share on Facebook</span>
+        </button>
+        <button class="share-button twitter tooltip" data-activity="${name}" data-platform="twitter" title="Share on Twitter">
+          🐦
+          <span class="tooltip-text">Share on Twitter</span>
+        </button>
+        <button class="share-button whatsapp tooltip" data-activity="${name}" data-platform="whatsapp" title="Share on WhatsApp">
+          💬
+          <span class="tooltip-text">Share on WhatsApp</span>
+        </button>
+        <button class="share-button email tooltip" data-activity="${name}" data-platform="email" title="Share via Email">
+          ✉️
+          <span class="tooltip-text">Share via Email</span>
+        </button>
+        <button class="share-button copy-link tooltip" data-activity="${name}" data-platform="copy" title="Copy Link">
+          🔗
+          <span class="tooltip-text">Copy link to clipboard</span>
+        </button>
+      </div>
       <div class="activity-card-actions">
         ${
           currentUser
@@ -577,6 +599,12 @@ document.addEventListener("DOMContentLoaded", () => {
       button.addEventListener("click", handleUnregister);
     });
 
+    // Add click handlers for share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", handleShare);
+    });
+
     // Add click handler for register button (only when authenticated)
     if (currentUser) {
       const registerButton = activityCard.querySelector(".register-button");
@@ -588,6 +616,62 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     activitiesList.appendChild(activityCard);
+  }
+
+  // Handle social sharing
+  function handleShare(event) {
+    const activityName = event.currentTarget.dataset.activity;
+    const platform = event.currentTarget.dataset.platform;
+    
+    // Get activity details for sharing
+    const activity = allActivities[activityName];
+    if (!activity) return;
+    
+    // Create share URL and text
+    const pageUrl = window.location.href.split('?')[0];
+    const shareUrl = `${pageUrl}?activity=${encodeURIComponent(activityName)}`;
+    const shareText = `Check out this activity at Mergington High School: ${activityName}`;
+    const shareDescription = activity.description;
+    
+    // Handle different platforms
+    switch (platform) {
+      case 'facebook':
+        // Facebook share dialog
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        window.open(fbUrl, '_blank', 'width=600,height=400');
+        break;
+        
+      case 'twitter':
+        // Twitter/X share
+        const twitterText = `${shareText} - ${shareDescription}`;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}&url=${encodeURIComponent(shareUrl)}`;
+        window.open(twitterUrl, '_blank', 'width=600,height=400');
+        break;
+        
+      case 'whatsapp':
+        // WhatsApp share
+        const whatsappText = `${shareText}\n${shareDescription}\n${shareUrl}`;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappText)}`;
+        window.open(whatsappUrl, '_blank');
+        break;
+        
+      case 'email':
+        // Email share
+        const emailSubject = `Activity at Mergington High School: ${activityName}`;
+        const emailBody = `${shareText}\n\n${shareDescription}\n\nLearn more: ${shareUrl}`;
+        const emailUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        window.location.href = emailUrl;
+        break;
+        
+      case 'copy':
+        // Copy link to clipboard
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showMessage('Link copied to clipboard!', 'success');
+        }).catch(() => {
+          showMessage('Failed to copy link', 'error');
+        });
+        break;
+    }
   }
 
   // Event listeners for search and filter

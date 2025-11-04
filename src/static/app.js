@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Theme toggle elements
   const themeToggle = document.getElementById("theme-toggle");
   const themeIcon = document.querySelector(".theme-icon");
-  const themeText = themeToggle.querySelector("span:last-child");
+  const themeText = document.getElementById("theme-text");
 
   // Search and filter elements
   const searchInput = document.getElementById("activity-search");

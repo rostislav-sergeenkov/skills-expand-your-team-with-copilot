@@ -618,6 +618,31 @@ document.addEventListener("DOMContentLoaded", () => {
     activitiesList.appendChild(activityCard);
   }
 
+  // Fallback method for copying to clipboard (for older browsers or HTTP)
+  function copyToClipboardFallback(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        showMessage('Link copied to clipboard!', 'success');
+      } else {
+        showMessage('Failed to copy link', 'error');
+      }
+    } catch (err) {
+      showMessage('Failed to copy link', 'error');
+    }
+    
+    document.body.removeChild(textArea);
+  }
+
   // Handle social sharing
   function handleShare(event) {
     const activityName = event.currentTarget.dataset.activity;
@@ -631,7 +656,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pageUrl = window.location.href.split('?')[0];
     const shareUrl = `${pageUrl}?activity=${encodeURIComponent(activityName)}`;
     const shareText = `Check out this activity at Mergington High School: ${activityName}`;
-    const shareDescription = activity.description;
+    const shareDescription = activity.description || '';
     
     // Handle different platforms
     switch (platform) {
@@ -665,11 +690,18 @@ document.addEventListener("DOMContentLoaded", () => {
         
       case 'copy':
         // Copy link to clipboard
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showMessage('Link copied to clipboard!', 'success');
-        }).catch(() => {
-          showMessage('Failed to copy link', 'error');
-        });
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          // Modern clipboard API (requires HTTPS or localhost)
+          navigator.clipboard.writeText(shareUrl).then(() => {
+            showMessage('Link copied to clipboard!', 'success');
+          }).catch(() => {
+            // Fallback if clipboard API fails
+            copyToClipboardFallback(shareUrl);
+          });
+        } else {
+          // Fallback for older browsers or HTTP
+          copyToClipboardFallback(shareUrl);
+        }
         break;
     }
   }

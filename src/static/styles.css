@@ -702,26 +702,57 @@ footer {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Theme toggle button */
-#theme-toggle {
+/* Social Sharing Buttons */
+.social-sharing {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.share-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 0.85rem;
-  transition: background-color 0.2s;
-  cursor: pointer;
-  border: none;
-  color: var(--primary-text);
-  margin-left: 10px;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#theme-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+.share-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.theme-icon {
-  font-size: 1rem;
+.share-button.facebook {
+  background-color: #1877f2;
+  color: white;
+}
+
+.share-button.twitter {
+  background-color: #000000;
+  color: white;
+}
+
+.share-button.whatsapp {
+  background-color: #25d366;
+  color: white;
+}
+
+.share-button.email {
+  background-color: #ea4335;
+  color: white;
+}
+
+.share-button.copy-link {
+  background-color: #6c757d;
+  color: white;
 }
